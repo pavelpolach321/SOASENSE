@@ -24,7 +24,7 @@
 
 
 /* Define node which you are about to flash - choose keys to flash*/
-#define NODE_ID             NODE_ID_LIGHT_1
+#define NODE_ID             NODE_ID_LIGHT_2
 
 #define NODE_ID_DEFAULT    (0)
 #define NODE_ID_DEVNODE    (1)
@@ -43,6 +43,7 @@
 #define NODE_ID_EXTERN_10  (30)
 #define NODE_ID_EXTERN_11  (31)
 #define NODE_ID_LIGHT_1    (100)
+#define NODE_ID_LIGHT_2    (101)
 
 #define NODE_ID_MINIMAL_2  (101)
 #define NODE_ID_MINIMAL_3  (102)
@@ -57,6 +58,8 @@
   #define DEVICEID           "LAB_NODE_01"
 #elif (NODE_ID == NODE_ID_LIGHT_1)
   #define DEVICEID           "LIGHT_01"
+#elif (NODE_ID == NODE_ID_LIGHT_2)
+  #define DEVICEID           "LIGHT_02"
 #endif
 
 #include "../keyfiles/lorawan-keys.h"
