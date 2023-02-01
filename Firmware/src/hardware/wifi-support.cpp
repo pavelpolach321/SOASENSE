@@ -27,8 +27,8 @@ uint32_t metadata_index = 0;
 ///   MQTT starts here       ///
 ////////////////////////////////
 AsyncMqttClient mqttClient;
-TimerHandle_t mqttReconnectTimer;
-TimerHandle_t wifiReconnectTimer;
+//TimerHandle_t mqttReconnectTimer;
+//TimerHandle_t wifiReconnectTimer;
 
 void delete_wifi_credentials(){
   WiFiManager wm;
@@ -74,8 +74,8 @@ void WiFiEvent(WiFiEvent_t event) {
       break;
     case SYSTEM_EVENT_STA_DISCONNECTED:
       Serial.println("WiFi lost connection");
-      xTimerStop(mqttReconnectTimer, 0); // ensure we don't reconnect to MQTT while reconnecting to Wi-Fi
-      xTimerStart(wifiReconnectTimer, 0);
+      //xTimerStop(mqttReconnectTimer, 0); // ensure we don't reconnect to MQTT while reconnecting to Wi-Fi
+      //xTimerStart(wifiReconnectTimer, 0);
       break;
     default:
       ;//Serial.printf("[WiFi-event] event: %d\n", event);
@@ -122,7 +122,7 @@ void onMqttConnect(bool sessionPresent) {
 void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
   Serial.println("[MQQT] Disconnected from MQTT.");
   if (WiFi.isConnected()) {
-    xTimerStart(mqttReconnectTimer, 0);
+    //xTimerStart(mqttReconnectTimer, 0);
   }
 }
 
@@ -189,9 +189,10 @@ String httpGETRequest(const char* serverName) {
   int httpResponseCode = http.GET();
   String payload = "{}"; 
   if (httpResponseCode>0) {
-    //Serial.print("HTTP Response code: ");
-    //Serial.println(httpResponseCode);
+    Serial.print("HTTP Response code: ");
+    Serial.println(httpResponseCode);
     payload = http.getString();
+    Serial.println(payload);
   }
   else {
     Serial.print("[FOTA] HTTP request Error code: ");
@@ -207,7 +208,7 @@ bool update_pending()
 {
   Serial.println("[FOTA] Getting firmware metadata");
   String version_file = httpGETRequest(version_file_url);
-  StaticJsonDocument<40> doc;
+  StaticJsonDocument<100> doc;
   deserializeJson(doc, version_file);
   uint8_t version = doc["version"];
   uint8_t subversion = doc["subversion"];
@@ -358,8 +359,8 @@ void sendValues(node_object_t *handle){
 void wifimode_setup()
 {
   Serial.begin(115200);
-  mqttReconnectTimer = xTimerCreate("mqttTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToMqtt));
-  wifiReconnectTimer = xTimerCreate("wifiTimer", pdMS_TO_TICKS(2000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToWifi));
+  //mqttReconnectTimer = xTimerCreate("mqttTimer", pdMS_TO_TICKS(60000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToMqtt));
+  //wifiReconnectTimer = xTimerCreate("wifiTimer", pdMS_TO_TICKS(60000), pdFALSE, (void*)0, reinterpret_cast<TimerCallbackFunction_t>(connectToWifi));
   WiFi.onEvent(WiFiEvent);
   mqttClient.onConnect(onMqttConnect);
   mqttClient.onDisconnect(onMqttDisconnect);
@@ -369,7 +370,8 @@ void wifimode_setup()
   mqttClient.setServer(mqtt_server, mqtt_port);
   // If your broker requires authentication (username and password), set them below
   uiPrintHeader();
-  //mqttClient.setCredentials("init_username", "init_password");
+
+  mqttClient.setCredentials(mqqt_user, mqqt_password);
   connectToWifi();
 }
 
@@ -379,8 +381,8 @@ void wifimode_loop(node_object_t *handle){
 
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= values_interval) {
-    hardwareUpdateData(&node_object);
-
+    //hardwareUpdateData(&node_object);
+    hardwareUpdateData_DUMMY(&node_object);
     previousMillis = currentMillis;
     update_index++;
     reconfigure_index++;

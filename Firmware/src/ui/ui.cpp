@@ -1,13 +1,14 @@
-#include "ui.h"
-#include "hardware/hardware.h"
-#include <Wire.h>
+
+#include "Arduino.h"
 #include "U8x8lib.h"
 #include "EasyLed.h"
 #include "../node_setup/setup.h"
-
+#include "ui.h"
+#include "hardware/hardware.h"
+//#include <Wire.h>
 HardwareSerial& serial = Serial;
-EasyLed led(LED_BUILTIN, EasyLed::ActiveLevel::Low);
-U8X8_SSD1306_128X64_NONAME_HW_I2C display(/*rst*/ OLED_RST, /*scl*/ SCL, /*sda*/ SDA);
+//EasyLed led(LED_BUILTIN, EasyLed::ActiveLevel::Low);
+U8X8_SSD1306_128X64_NONAME_HW_I2C display(/*scl*/ SCL, /*sda*/ SDA);
 
 void initDisplay()
 {
@@ -26,7 +27,7 @@ void initOutputs(){
     initSerial(MONITOR_SPEED, 0);  
 }
 
-void uiWifiBegin(){
+void uiWifiBegin(){  
     display.setCursor(COL_0, ROW_1);
     display.print(F("Connecting.."));
 }
@@ -129,7 +130,7 @@ void uiDisplayLoop(node_object_t *handle, uint16_t metadata, uint16_t reconfig, 
 
 
 void uiPrintProvision(node_object_t *handle) {
-    Serial.println("[PROVISION]");
+    Serial.println("[PROVISIONED]");
     Serial.print("[name] "); Serial.println(handle->provision.device_name);    
     Serial.print("[deveui] ");
     for(int i = 0; i<8; i++){

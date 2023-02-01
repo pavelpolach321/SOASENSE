@@ -201,6 +201,7 @@ extern node_object_t node_object;
 void hardwareInit(node_object_t *handle);
 // read data
 void hardwareUpdateData(node_object_t *handle);
+void hardwareUpdateData_DUMMY(node_object_t *handle);
 // create payload
 void hardwareCreatePayload(node_object_t *handle);
 // process downlink

@@ -1,6 +1,7 @@
 #include "main.h"
 #include "hardware/hardware.h"
 #include "hardware/wifi-support.h"
+#include "Arduino.h"
 
 
 //        ██████  ▒█████   ▄▄▄        ██████ ▓█████  ███▄    █   ██████ ▓█████             
@@ -38,7 +39,7 @@ void setup()
 
     hardwareSetup(&node_object);
 
-    if(CONNECTIVITY_ERASE_CREDENTIALS) {
+    /*if(CONNECTIVITY_ERASE_CREDENTIALS) {
         delete_wifi_credentials();
         uiEraseCredentialsAndWait();
         uiDisplayProvision();
@@ -47,7 +48,7 @@ void setup()
           ;
     } else if(DISPLAY_ON){
         uiDisplayHeader(&node_object);
-    }
+    }*/
 
     if(SERIAL_OUTPUT_ON && SERIAL_OUTPUT_DBG){
         uiPrintHeader();

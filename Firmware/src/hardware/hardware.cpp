@@ -96,6 +96,8 @@ void hardwareSetup(node_object_t *node_object){
   } else {
     node_object->setup.sw_pos_1 = false;
   }
+  // no sensors:
+  //node_object->setup.sw_pos_8 = true;
 }
 
 int counterInit(){
@@ -162,6 +164,92 @@ void hardwareUpdateData(node_object_t *handle) {
     if (handle->probes.ADS1115_2_present) {
         socketsUpdate(&node_object, ADS1115_2);
     }
+}
+
+// no sensors
+void hardwareUpdateData_DUMMY(node_object_t *handle) {
+  counterUpdate(&node_object);
+  handle->probes.counter=true;
+  //hardwareBoardUpdate(&node_object);
+
+  //sps30
+  handle->probes.SPS30_present=true;
+  handle->data.sps30_PM1=random(0,2000);
+  handle->data.sps30_PM2=random(0,2000);
+  handle->data.sps30_PM4=random(0,2000);
+  handle->data.sps30_PM10=random(0,2000);
+  handle->data.sps30_NumPM0=random(0,2000);
+  handle->data.sps30_NumPM1=random(0,2000);
+  handle->data.sps30_NumPM2=random(0,2000);
+  handle->data.sps30_NumPM4=random(0,2000);
+  handle->data.sps30_NumPM10=random(0,2000);
+  handle->data.sps30_PartSize=random(0,2000);
+  //bme280
+  handle->probes.BME280_present = true;
+  handle->data.bme280_t=random(0,2000);
+  handle->data.bme280_p=random(900,1000);
+  handle->data.bme280_h=random(0,2000);
+  //opcn3
+  handle->probes.OPCN3_present = true;
+  handle->data.opcn3_PM1=random(0,2000);
+  handle->data.opcn3_PM2_5=random(0,2000);
+  handle->data.opcn3_PM10=random(0,2000);
+  // opcn3hist
+  handle->probes.OPCN3_send_hist=true;
+  handle->data.opcn3_bin0=random(0,50);
+  handle->data.opcn3_bin1=random(0,50);
+  handle->data.opcn3_bin2=random(0,50);
+  handle->data.opcn3_bin3=random(0,50);
+  handle->data.opcn3_bin4=random(0,50);
+  handle->data.opcn3_bin5=random(0,50);
+  handle->data.opcn3_bin6=random(0,50);
+  handle->data.opcn3_bin7=random(0,50);
+  handle->data.opcn3_bin8=random(0,50);
+  handle->data.opcn3_bin9=random(0,50);
+  handle->data.opcn3_bin10=random(0,50);
+  handle->data.opcn3_bin11=random(0,50);
+  handle->data.opcn3_bin12=random(0,50);
+  handle->data.opcn3_bin13=random(0,50);
+  handle->data.opcn3_bin14=random(0,50);
+  handle->data.opcn3_bin15=random(0,50);
+  handle->data.opcn3_bin16=random(0,50);
+  handle->data.opcn3_bin17=random(0,50);
+  handle->data.opcn3_bin18=random(0,50);
+  handle->data.opcn3_bin19=random(0,50);
+  handle->data.opcn3_bin20=random(0,50);
+  handle->data.opcn3_bin21=random(0,50);
+  handle->data.opcn3_bin22=random(0,50);
+  handle->data.opcn3_bin23=random(0,50);
+
+  handle->data.opcn3_bin1_MToF=random(0,10);
+  handle->data.opcn3_bin3_MToF=random(0,10);
+  handle->data.opcn3_bin5_MToF=random(0,10);
+  handle->data.opcn3_bin7_MToF=random(0,10);
+
+  handle->data.opcn3_sampling_p=random(0,10);
+  handle->data.opcn3_flow_rate=random(0,10);
+  handle->data.opcn3_t=random(0,10);
+  handle->data.opcn3_h=random(0,10);
+
+  handle->data.opcn3_RC_glitch=random(0,30);
+  handle->data.opcn3_RC_long=random(0,30);
+  handle->data.opcn3_RC_ratio=random(0,30);
+  handle->data.opcn3_out_of_range=random(0,30);
+  handle->data.opcn3_fan_rev=random(0,30);
+  handle->data.opcn3_laser_stat=random(0,30);
+  
+  //sockets1
+  handle->probes.ADS1115_1_present=true;
+  handle->data.AD_socket_1_1=random(2000,30000);
+  handle->data.AD_socket_1_2=random(2000,30000);
+  handle->data.AD_socket_2_1=random(2000,30000);
+  handle->data.AD_socket_2_2=random(2000,30000);
+  //sockets2
+  handle->probes.ADS1115_2_present=true;
+  handle->data.AD_socket_3_1=random(2000,30000);
+  handle->data.AD_socket_3_2=random(2000,30000);
+  handle->data.AD_socket_4_1=random(2000,30000);
+  handle->data.AD_socket_4_2=random(2000,30000);
 }
 
 void hardwareCreatePayload(node_object_t *handle) {
