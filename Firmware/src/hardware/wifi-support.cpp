@@ -7,6 +7,7 @@
 #include <HTTPClient.h>
 #include "HttpsOTAUpdate.h"
 #include <WiFiManager.h> // https://github.com/tzapu/WiFiManager
+#include <esp_task_wdt.h>
 
 #include "ui/ui.h"
 #include "hardware.h"
@@ -143,6 +144,7 @@ void onMqttPublish(uint16_t packetId) {
   Serial.println("[MQQT] Publish acknowledged.");
   Serial.print("[MQQT]   packetId: ");
   Serial.println(packetId);
+  
 }
 
 ////////////////////////////////
@@ -319,8 +321,8 @@ void sendValues(node_object_t *handle){
 
         doc["opcn3_sampling_p"] = handle->data.opcn3_sampling_p;
         doc["opcn3_flow_rate"] = handle->data.opcn3_flow_rate;
-        doc["opcn3_t"] = handle->data.opcn3_t;
-        doc["opcn3_h"] = handle->data.opcn3_h;
+        doc["opcn3_t"] = handle->data.opcn3_t/1000;
+        doc["opcn3_h"] = handle->data.opcn3_h/1000  ;
 
         doc["opcn3_RC_glitch"] = handle->data.opcn3_RC_glitch;
         doc["opcn3_RC_long"] = handle->data.opcn3_RC_long;
@@ -351,7 +353,7 @@ void sendValues(node_object_t *handle){
     strcat(publish_string, MQTT_PUB_TOPIC_END);
 
     //Serial.println("[LOOP] Pretty json to send:");Serial.println(json_to_send);
-    uint16_t packetIdPub1 = mqttClient.publish(publish_string, 1, true, String(json_to_send).c_str());                            
+    uint16_t packetIdPub1 = mqttClient.publish(publish_string, 1, true, String(json_to_send).c_str());
     Serial.printf("[LOOP] Publishing on topic %s at QoS 1, packetId: ", publish_string);
     Serial.println(packetIdPub1);
 }
@@ -379,10 +381,17 @@ void wifimode_setup()
 
 void wifimode_loop(node_object_t *handle){
 
+  esp_task_wdt_reset();
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= values_interval) {
+    if(strcmp("LIGHT_02", node_object.provision.device_name) != 0){
+      hardwareUpdateData(&node_object);
+    } else {
+      hardwareUpdateData_DUMMY(&node_object);
+    }
+    
     //hardwareUpdateData(&node_object);
-    hardwareUpdateData_DUMMY(&node_object);
+    //hardwareUpdateData_DUMMY(&node_object);
     previousMillis = currentMillis;
     update_index++;
     reconfigure_index++;

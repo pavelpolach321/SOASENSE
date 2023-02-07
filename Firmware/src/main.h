@@ -4,6 +4,7 @@
 #include "../node_setup/setup.h"
 #include "hardware/pcf8574_expander.h"
 #include "ui/ui.h"
+#include <esp_task_wdt.h>
 //#include "LMIC/LMIC-node.h"
 
 #define USE_WIFI      0

@@ -31,6 +31,9 @@ node_object_t node_object;
 
 void setup() 
 {
+    esp_task_wdt_init(WDT_TIMEOUT, true);  // enable panic so ESP32 restarts
+    esp_task_wdt_add(NULL);
+
     initOutputs();
 
     hardwareHandleEEPROM(&node_object);
@@ -39,16 +42,19 @@ void setup()
 
     hardwareSetup(&node_object);
 
-    /*if(CONNECTIVITY_ERASE_CREDENTIALS) {
-        delete_wifi_credentials();
-        uiEraseCredentialsAndWait();
-        uiDisplayProvision();
-        uiSerialProvision();
-        while(1)
-          ;
-    } else if(DISPLAY_ON){
-        uiDisplayHeader(&node_object);
-    }*/
+    if((strcmp("LIGHT_01", node_object.provision.device_name) != 0) || \
+       (strcmp("LIGHT_02", node_object.provision.device_name) != 0)){
+      if(CONNECTIVITY_ERASE_CREDENTIALS) {
+          delete_wifi_credentials();
+          uiEraseCredentialsAndWait();
+          uiDisplayProvision();
+          uiSerialProvision();
+          while(1)
+            ;
+      } else if(DISPLAY_ON){
+          uiDisplayHeader(&node_object);
+      }
+    }
 
     if(SERIAL_OUTPUT_ON && SERIAL_OUTPUT_DBG){
         uiPrintHeader();
@@ -69,7 +75,9 @@ void setup()
 
     uiDisplayHwInit();
 
+  if(strcmp("LIGHT_02", node_object.provision.device_name) != 0){
     hardwareInit(&node_object);
+  }
 }
 
 void loop() 

@@ -186,9 +186,9 @@ void hardwareUpdateData_DUMMY(node_object_t *handle) {
   handle->data.sps30_PartSize=random(0,2000);
   //bme280
   handle->probes.BME280_present = true;
-  handle->data.bme280_t=random(0,2000);
-  handle->data.bme280_p=random(900,1000);
-  handle->data.bme280_h=random(0,2000);
+  handle->data.bme280_t=random(0,20000);
+  handle->data.bme280_p=random(900000,1000000);
+  handle->data.bme280_h=random(0,100000);
   //opcn3
   handle->probes.OPCN3_present = true;
   handle->data.opcn3_PM1=random(0,2000);
