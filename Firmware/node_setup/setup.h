@@ -4,7 +4,7 @@
 #include "stdint.h"
 
 #define FW_VERSION ((uint8_t)       0)
-#define NODE_SUBVERSION ((uint8_t)  46)
+#define NODE_SUBVERSION ((uint8_t)  47)
 
 #define WIFI_SECONDS_TO_LOOP_DEFAULT               10
 #define WIFI_MINUTES_TO_FWUPDATE_CHECK_DEFAULT     1
