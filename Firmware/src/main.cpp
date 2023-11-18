@@ -28,9 +28,21 @@
 
 node_object_t node_object;
 
+#ifdef DO_DEEP_SLEEP
+#define uS_TO_S_FACTOR 1000000  /* Conversion factor for micro seconds to seconds */
+#define TIME_TO_SLEEP  60*3        /* Time ESP32 will go to sleep (in seconds) */
+#endif
+
+
+#include "soc/soc.h"
+#include "soc/rtc_cntl_reg.h"
+
 
 void setup() 
 {
+    // FIXME stupid lilygo board 
+    WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector
+
     esp_task_wdt_init(WDT_TIMEOUT, true);  // enable panic so ESP32 restarts
     esp_task_wdt_add(NULL);
 
@@ -47,7 +59,9 @@ void setup()
       if(CONNECTIVITY_ERASE_CREDENTIALS) {
           delete_wifi_credentials();
           uiEraseCredentialsAndWait();
+#ifdef USE_DISPLAY
           uiDisplayProvision();
+#endif
           uiSerialProvision();
           while(1)
             ;
@@ -78,6 +92,9 @@ void setup()
   if(strcmp("LIGHT_02", node_object.provision.device_name) != 0){
     hardwareInit(&node_object);
   }
+#ifdef DO_DEEP_SLEEP
+  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
+#endif
 }
 
 void loop() 

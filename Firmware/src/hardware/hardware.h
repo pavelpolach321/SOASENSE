@@ -240,5 +240,6 @@ void hardwareProbeSHT40(node_object_t *handle);
 void hardwareProbeSCD40(node_object_t *handle);
 void hardwareProbeSGP41(node_object_t *handle);
 
+void hardwareSleep(node_object_t *handle);
 
 #endif

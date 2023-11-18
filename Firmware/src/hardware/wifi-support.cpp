@@ -383,7 +383,9 @@ void wifimode_loop(node_object_t *handle){
 
   esp_task_wdt_reset();
   unsigned long currentMillis = millis();
+  #ifndef DO_DEEP_SLEEP
   if (currentMillis - previousMillis >= values_interval) {
+  #endif
     if(strcmp("LIGHT_02", node_object.provision.device_name) != 0){
       hardwareUpdateData(&node_object);
     } else {
@@ -427,5 +429,14 @@ void wifimode_loop(node_object_t *handle){
 
     uiSerialLoop(&node_object);
     sendValues(&node_object);
+#ifdef DO_DEEP_SLEEP
+    Serial.println("sleeping now...");
+    displaySleep();
+    hardwareSleep(&node_object);
+    esp_deep_sleep_start();
+    Serial.println("This line is not going to be run");
+#endif
+#ifndef DO_DEEP_SLEEP
   }
+#endif
 }

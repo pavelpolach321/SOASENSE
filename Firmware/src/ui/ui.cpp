@@ -12,8 +12,10 @@ U8X8_SSD1306_128X64_NONAME_HW_I2C display(/*scl*/ SCL, /*sda*/ SDA);
 
 void initDisplay()
 {
+#ifdef USE_DISPLAY
     display.begin();
-    display.setFont(u8x8_font_victoriamedium8_r); 
+    display.setFont(u8x8_font_victoriamedium8_r);
+#endif
 }
 
 bool initSerial(unsigned long speed = 115200, int16_t timeoutSeconds = 0)
@@ -23,23 +25,37 @@ bool initSerial(unsigned long speed = 115200, int16_t timeoutSeconds = 0)
 }
 
 void initOutputs(){
+#ifdef USE_DISPLAY
     initDisplay();
+#endif
     initSerial(MONITOR_SPEED, 0);  
 }
 
+void displaySleep() {
+#ifdef USE_DISPLAY
+    display.clear();
+#endif
+}
+
 void uiWifiBegin(){  
+#ifdef USE_DISPLAY
     display.setCursor(COL_0, ROW_1);
     display.print(F("Connecting.."));
+#endif
 }
 
 void uiWifiConnected(){
+#ifdef USE_DISPLAY
     display.setCursor(COL_0, ROW_2);
     display.print(F("Wifi connected!"));
+#endif
 }
 
 void uiDisplayHwInit(){
+#ifdef USE_DISPLAY
     display.setCursor(COL_0, ROW_4);
     display.print(F("Booting sensors"));
+#endif
 }
 
 void uiPrintHeader() {
@@ -54,24 +70,28 @@ void uiPrintHeader() {
 }
 
 void uiDisplayHeader(node_object_t *handle) {
-    //#ifdef USE_DISPLAY
+    #ifdef USE_DISPLAY
     display.clear();
     display.setCursor(COL_0, ROW_0);
     display.print(F("id:"));
     display.setCursor(COL_4, ROW_0);
     display.print(F(handle->provision.device_name));
+#endif
 }
 
 void uiEraseCredentialsAndWait(){
+#ifdef USE_DISPLAY
     display.clear();
     display.setCursor(COL_0, ROW_0);
     display.print(F("Clearing WIFI..."));
     delay(200);
     display.setCursor(COL_0, ROW_1);
     display.print(F("done"));
+#endif
 }
 
 void uiDisplayProvision() {
+#ifdef USE_DISPLAY
     display.clear();
     display.setCursor(COL_0, ROW_0);
     display.print(F("ssid:"));
@@ -98,9 +118,11 @@ void uiDisplayProvision() {
     display.print(node_object.mac_addr[4], 16);
     display.setCursor(10, ROW_4);
     display.print(node_object.mac_addr[5], 16);
+#endif
 }
 
 void uiDisplayLoop(node_object_t *handle, uint16_t metadata, uint16_t reconfig, uint16_t update) {
+#ifdef USE_DISPLAY
     display.clear();
     display.setCursor(COL_0, ROW_0);
     display.print(F(handle->provision.device_name));
@@ -126,6 +148,7 @@ void uiDisplayLoop(node_object_t *handle, uint16_t metadata, uint16_t reconfig, 
     display.print(F("Meta: "));
     display.setCursor(COL_10, ROW_6);
     display.print(metadata);
+#endif
 }
 
 
@@ -160,7 +183,7 @@ void uiSerialLoop(node_object_t *handle) {
     }
     if (handle->probes.board_voltages) {
         Serial.println("[------------------------------------------------------------------------------------------------------------------]");
-        Serial.print("[Voltages]  3v5, Vin:            "); Serial.print(((float)handle->data.board_3_5V / 100)); Serial.print(", ");
+        Serial.print("[Voltages]  3v5, batt:            "); Serial.print(((float)handle->data.board_3_5V / 100)); Serial.print(", ");
                                                         Serial.print(((float)handle->data.board_batt / 100)); Serial.println("\t[V]");
     }
     if (handle->probes.BME280_present) {

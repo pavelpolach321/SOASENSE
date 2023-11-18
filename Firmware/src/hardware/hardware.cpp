@@ -127,7 +127,7 @@ void hardwareInitInbuilt(node_object_t *handle) {
 
 void hardwareProbeSensors(node_object_t *handle) {
   probeBME280(handle);
-  probeOPCN3(handle);
+  //probeOPCN3(handle);
   probeADS1115(handle);
   probeSPS30(handle);
   //probeGPS();
@@ -139,7 +139,7 @@ void hardwareProbeSensors(node_object_t *handle) {
 void hardwareInit(node_object_t *handle) {
     hardwareInitInbuilt(handle);
     hardwareEnable5V();
-    delay(1000);
+    //delay(100);
     hardwareProbeSensors(handle);
 }
 
@@ -148,16 +148,18 @@ void hardwareUpdateData(node_object_t *handle) {
     hardwareBoardUpdate(&node_object);
     if (handle->probes.SPS30_present) {
         sps30Update(&node_object);
+        //delay(4000);
+        //sps30Update(&node_object);
     }
     if (handle->probes.BME280_present) {
         bme280Update(&node_object);
     }
-    if (handle->probes.OPCN3_present) {
-        opcn3ReadFlush();
-        delay(OPC_N3_SAMPLING_TIME); 
-        opcn3ReadAll(&node_object);
-        delay(100);
-    }
+    //if (handle->probes.OPCN3_present) {
+    //    opcn3ReadFlush();
+    //    delay(OPC_N3_SAMPLING_TIME); 
+    //    opcn3ReadAll(&node_object);
+    //    delay(100);
+    //}
     if (handle->probes.ADS1115_1_present) {
         socketsUpdate(&node_object, ADS1115_1);
     }
@@ -375,4 +377,9 @@ void hardwareCreatePayload(node_object_t *handle) {
 
     // Must increase index so it became length
     handle->payload_len++;
+}
+
+void hardwareSleep(node_object_t *handle) {
+    sps30Deinit(handle);
+    hardwareDisable5V();
 }

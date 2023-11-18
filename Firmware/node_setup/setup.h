@@ -16,6 +16,7 @@
 #define EEPROM_SHOW          (3)
 
 #define EEPROM_MODE         EEPROM_SHOW
+//#define EEPROM_MODE         EEPROM_PROVISION
 
 #define AP_NAME     "SOASENSE_AP"
 #define AP_PASSWORD  "tacrnode"
@@ -24,7 +25,14 @@
 #define WDT_TIMEOUT (WIFI_SECONDS_TO_LOOP_DEFAULT*10)     // define a 3 seconds WDT (Watch Dog Timer)
 
 /* Define node which you are about to flash - choose keys to flash*/
-#define NODE_ID             NODE_ID_LIGHT_2
+#define NODE_ID             NODE_VER2_01
+
+#define NODE_VER2_01       (201)
+#define NODE_VER2_02       (202)
+#define NODE_VER2_03       (203)
+#define NODE_VER2_04       (204)
+#define NODE_VER2_05       (205)
+#define NODE_VER2_06       (206)
 
 #define NODE_ID_DEFAULT    (0)
 #define NODE_ID_DEVNODE    (1)
@@ -52,6 +60,8 @@
 #define NODE_ID_MINIMAL_6  (105)
 
 
+
+
 #if (NODE_ID == NODE_ID_DEVNODE)
   #define DEVICEID           "DEVNODE"
 #elif (NODE_ID == NODE_ID_LAB_1)
@@ -60,6 +70,18 @@
   #define DEVICEID           "LIGHT_01"
 #elif (NODE_ID == NODE_ID_LIGHT_2)
   #define DEVICEID           "LIGHT_02"
+#elif (NODE_ID == NODE_VER2_01)
+  #define DEVICEID           "VER02_DEV01"
+#elif (NODE_ID == NODE_VER2_02)
+  #define DEVICEID           "VER02_DEV02"
+#elif (NODE_ID == NODE_VER2_03)
+  #define DEVICEID           "VER02_DEV03"
+#elif (NODE_ID == NODE_VER2_04)
+  #define DEVICEID           "VER02_DEV04"
+#elif (NODE_ID == NODE_VER2_05)
+  #define DEVICEID           "VER02_DEV05"
+#elif (NODE_ID == NODE_VER2_06)
+  #define DEVICEID           "VER02_DEV06"
 #endif
 
 #include "../keyfiles/lorawan-keys.h"
@@ -75,10 +97,10 @@
 // Internal board AD channels and constants
 // ADC pins on board
 #define ADC_DIVIDER_3V5             2.0
-#define ADC_DIVIDER_BATT            4.109
+#define ADC_DIVIDER_BATT            4.5944
 #define ADC_DIVIDER_5V              2.0
-#define ADC_3V5_RAIL                GPIO_NUM_34
-#define ADC_BATT                    GPIO_NUM_35
+#define ADC_3V5_RAIL                GPIO_NUM_35
+#define ADC_BATT                    GPIO_NUM_34
 #define ADC_5V_RAIL                 GPIO_NUM_2   
 
 //----------------------------------------

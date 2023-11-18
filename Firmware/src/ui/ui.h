@@ -56,6 +56,7 @@ void uiDisplayHwInit();
 void uiPrintProvision(node_object_t *handle);
 
 void uiDisplayLoop(node_object_t *handle, uint16_t metadata, uint16_t reconfig, uint16_t update);
+void displaySleep();
 void uiSerialLoop(node_object_t *handle);
 void dbg(char mesage[]);
 

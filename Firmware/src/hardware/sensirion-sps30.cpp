@@ -50,7 +50,7 @@
 /* skip first x readings as they might be wrong
  * due to start-up */
 //////////////////////////////////////////////////////////////
-#define SKIPFIRST 3
+#define SKIPFIRST 5
 
 ///////////////////////////////////////////////////////////////
 /////////// NO CHANGES BEYOND THIS POINT NEEDED ///////////////
@@ -147,7 +147,7 @@ void probeSPS30(node_object_t *handle) {
 }
 
 int sps30Init(node_object_t *handle) {
-   Serial.begin(115200);
+   //Serial.begin(115200);
 
   //Serial.println(F("Trying to connect"));
 
@@ -183,6 +183,16 @@ int sps30Init(node_object_t *handle) {
   return 0;
 }
 
+
+int sps30Deinit(node_object_t *handle) {
+  
+  // set driver debug level
+  sps30.stop();
+
+  return 0;
+}
+
+
 /**
  * @brief : read and display all values
  */
@@ -198,35 +208,33 @@ int sps30Update(node_object_t *handle)
   // Begin communication channel;
   if (! sps30.begin(SP30_COMMS))
     Errorloop((char *) "could not initialize communication channel.", 0);
+    // start measurement
+  sps30.reset();
+  delay(400);
+  sps30.start();
+  //delay(4000);
+  ret = sps30.GetValues(&val);
 
   // loop to get data
   do {
+    
+    if (s_kip > 0) {
+      Serial.println();
+      Serial.print(s_kip);  
+      Serial.println(" runs to skip");
+      s_kip--;
+    }
 
-    //if (s_kip > 0) {
-    //Serial.println();
-    //Serial.println(s_kip);  
-    //Serial.println(" skipping");
-    s_kip--;
-    //}
-
+    delay(30000); // 2000 malo, 60 000 stabilni
+    
     ret = sps30.GetValues(&val);
 
-    // data might not have been ready
-    if (ret == SPS30_ERR_DATALENGTH){
-
-        if (error_cnt++ > 3) {
-          ErrtoMess((char *) "Error during reading values: ",ret);
-          return(false);
-        }
-        delay(1000);
-    }
-
     // if other error
-    else if(ret != SPS30_ERR_OK) {
-      ErrtoMess((char *) "Error during reading values: ",ret);
-      return(false);
+    if(ret != SPS30_ERR_OK) {
+      delay(5000);
     }
-    Serial.println("Skipping");
+    
+    
   } while (ret != SPS30_ERR_OK && s_kip > 0);
 
   if (ret == SPS30_ERR_OK) {
