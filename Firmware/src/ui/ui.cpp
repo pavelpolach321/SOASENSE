@@ -285,6 +285,12 @@ void uiSerialLoop(node_object_t *handle) {
         Serial.print("[ADS1115-2] Socket_4_1, 4_2:     "); Serial.print(((float)handle->data.AD_socket_4_1 / 100)); Serial.print(", ");
                                                            Serial.print(((float)handle->data.AD_socket_4_2 / 100)); Serial.println("\t[V]");
     }
+    if (handle->probes.SCD4X_present) {
+        Serial.println("[------------------------------------------------------------------------------------------------------------------]");
+        Serial.print("[SDC4X_co2]                      "); Serial.print(handle->data.scd4x_co2); Serial.println("\t[ppm?]");    
+        Serial.print("[SDC4X_temp]                     "); Serial.print(((float)handle->data.scd4x_temp / 100)); Serial.println("\t[*C]");
+        Serial.print("[SDC4X_hum]                      "); Serial.print(((float)handle->data.scd4x_hum / 100)); Serial.println("\t[%]");
+    }
 }
 
 void uiSerialProvision() {

@@ -125,6 +125,7 @@ void hardwareInitInbuilt(node_object_t *handle) {
     hardwareBoardInit();
 };
 
+#include "sensirion-scd4x.h" 
 void hardwareProbeSensors(node_object_t *handle) {
   probeBME280(handle);
   //probeOPCN3(handle);
@@ -134,6 +135,9 @@ void hardwareProbeSensors(node_object_t *handle) {
   //hardwareProbeSHT40(handle);
   //hardwareProbeSCD40(handle);
   //hardwareProbeSGP41(handle);
+  Serial.println("SCD4X setup:");
+  //setup_stuff();
+  probeSDC4X(handle);
 }
 
 void hardwareInit(node_object_t *handle) {
@@ -146,6 +150,7 @@ void hardwareInit(node_object_t *handle) {
 void hardwareUpdateData(node_object_t *handle) {
     counterUpdate(&node_object);
     hardwareBoardUpdate(&node_object);
+
     if (handle->probes.SPS30_present) {
         sps30Update(&node_object);
         //delay(4000);
@@ -165,6 +170,9 @@ void hardwareUpdateData(node_object_t *handle) {
     }
     if (handle->probes.ADS1115_2_present) {
         socketsUpdate(&node_object, ADS1115_2);
+    }
+    if (handle->probes.SCD4X_present) {
+      sdc4xUpdate(handle);
     }
 }
 

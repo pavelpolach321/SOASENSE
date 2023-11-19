@@ -343,6 +343,11 @@ void sendValues(node_object_t *handle){
         doc["AD_socket_4_1"] = ((float)handle->data.AD_socket_4_1)/100;
         doc["AD_socket_4_2"] = ((float)handle->data.AD_socket_4_2)/100;
     }
+    if (handle->probes.SCD4X_present) {
+        doc["scd4x_co2"] = handle->data.scd4x_co2;
+        doc["scd4x_hum"] = ((float)handle->data.scd4x_hum)/100;
+        doc["scd4x_temp"] = ((float)handle->data.scd4x_temp)/100;
+    }
     serializeJsonPretty(doc, json_to_send);
     //Serial.print("[LOOP] Sizeof(json_to_send): ");
     //Serial.println(sizeof(json_to_send));

@@ -130,6 +130,11 @@ typedef struct {
     uint16_t AD_socket_3_2;
     uint16_t AD_socket_4_1;
     uint16_t AD_socket_4_2;
+    // scd4x 
+    uint16_t scd4x_co2;
+    uint16_t scd4x_temp;
+    uint16_t scd4x_hum;
+    
 } node_data_t;
 
 typedef struct { 
@@ -175,7 +180,7 @@ typedef struct {
     bool ADS1115_2_present;
     bool SHT40_present;
     bool SGP41_present;
-    bool SCD40_present;
+    bool SCD4X_present;
 } probes_t;
 
 typedef struct node_object_t{
